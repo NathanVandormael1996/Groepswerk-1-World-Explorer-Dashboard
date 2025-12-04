@@ -14,6 +14,11 @@ export function renderCountryList({ countries, favorites, onCountryClick, onFavo
 
     clearElement(container);
 
+    const countLabel = document.querySelector("#countries_count");
+    if (countLabel) {
+        countLabel.textContent = `${countries?.length ?? 0} landen`;
+    }
+
     if (!countries || countries.length === 0) {
         const empty = createElement(
             "div",
