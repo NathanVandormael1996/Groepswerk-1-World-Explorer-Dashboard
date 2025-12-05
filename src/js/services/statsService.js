@@ -22,19 +22,30 @@ export async function fetchRateToEuro(currencyCode) {
     }
 
 }
-/**
- * Bereken statistieken op basis van gefilterde landen en favorieten.
- * @param {Array} countries huidige gefilterde landen
- * @param {Array} favorites lijst van favorieten
- */
 export function calculateStats(countries, favorites) {
-// TODO:
-// - totalCountries
-// - averagePopulation
-// - favoritesPopulation
+
+    // Aantal favorieten
+    const totalCountries = favorites.length;
+
+    // Gemiddelde populatie van favorieten
+    let averagePopulation = 0;
+    if (favorites.length > 0) {
+        const sum = favorites.reduce(
+            (acc, c) => acc + (typeof c.population === "number" ? c.population : 0),
+            0
+        );
+        averagePopulation = Math.round(sum / favorites.length);
+    }
+
+    // Totale populatie van favorieten
+    const favoritesPopulation = favorites.reduce(
+        (acc, f) => acc + f.population, 0
+    );
+
     return {
-        totalCountries: 0,
-        averagePopulation: 0,
-        favoritesPopulation: 0
+        totalCountries,
+        averagePopulation,
+        favoritesPopulation
     };
 }
+

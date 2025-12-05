@@ -113,6 +113,7 @@ function isFavorite(country) {
     return favorites.some((fav) => fav.cca3 === key);
 }
 function renderFavorites() {
+
     if (!favoritesPanel) return;
     favoritesPanel.innerHTML = "";
     if (!favorites || favorites.length === 0) {
