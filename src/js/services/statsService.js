@@ -5,12 +5,22 @@ const EXCHANGE_API_BASE = "https://api.exchangerate.host/latest";
  * @returns {Promise<number|null>} wisselkoers of null bij fout
  */
 export async function fetchRateToEuro(currencyCode) {
-// TODO:
-// - bouw URL op met ?base=EUR&symbols=CURRENCY
-// - gebruik fetch + async/await
-// - haal de juiste rate uit data.rates[currencyCode]
-// - geef null terug bij fout
-    return null;
+    if (!currencyCode) return null;
+
+    const url = `${EXCHANGE_API_BASE}?base=EUR&symbols=${encodeURIComponent(currencyCode)}`;
+
+    try {
+        const res = await fetch(url);
+        if (!res.ok) return null;
+
+        const data = await res.json();
+        if (!data?.rates?.[currencyCode]) return null;
+
+        return data.rates[currencyCode];
+    } catch {
+        return null;
+    }
+
 }
 /**
  * Bereken statistieken op basis van gefilterde landen en favorieten.

@@ -8,28 +8,27 @@ let marker;
 export function initMap() {
     const mapContainer = document.querySelector("#country_map");
     if (!mapContainer) return;
-// TODO:
-// - maak een Leaflet map
-// - stel een globale view in (bijv. wereldkaart)
-// - voeg OSM-tiles toe
-// Voorbeeld (mag aangepast worden door studenten):
-// map = L.map(mapContainer).setView([20, 0], 2);
-// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: ... }).addTo(map);
+    if (map) return;
+
+    map = L.map(mapContainer).setView([20, 0], 2);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 }
-/**
- * Zoomt in op een bepaald land en toont een marker met naam.
- * @param {number} lat
- * @param {number} lng
- * @param {string} name
- */
 export function focusCountry(lat, lng, name) {
     if (!map) return;
-    if (typeof lat !== "number" || typeof lng !== "number") {
-        console.warn("Ongeldige coördinaten voor focusCountry");
-        return;
+
+    map.setView([lat, lng], 5);
+
+    if (marker) {
+        map.removeLayer(marker);
     }
-// TODO:
-// - map.setView([lat, lng], zoomLevel);
-// - bestaande marker verwijderen (indien aanwezig)
-// - nieuwe marker maken met popup-tekst (name)
+
+    marker = L.marker([lat, lng]).addTo(map);
+
+    if (name) {
+        marker.bindPopup(String(name)).openPopup();
+    }
 }

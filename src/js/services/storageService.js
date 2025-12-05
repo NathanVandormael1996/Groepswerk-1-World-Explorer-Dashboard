@@ -1,21 +1,33 @@
 const STORAGE_KEY = "world-explorer-favorites";
+
 /**
- * Lees favorieten uit localStorage.
- * @returns {Array} lijst van favoriete landen (of lege array)
+ * Leest favorieten uit localStorage.
+ * @returns {Array}
  */
 export function loadFavorites() {
-// TODO:
-// - lees uit localStorage met STORAGE_KEY
-// - parse JSON
-// - ga veilig om met null / parse errors
-    return [];
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+
+        if (!raw) return [];
+
+        const parsed = JSON.parse(raw);
+
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.warn("Fout bij lezen van localStorage favoris: ", error);
+        return [];
+    }
 }
+
 /**
- * Schrijf favorieten naar localStorage.
+ * Slaat favorieten op in localStorage.
  * @param {Array} favorites
  */
 export function saveFavorites(favorites) {
-// TODO:
-// - stringify favorites
-// - schrijf naar localStorage
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    } catch (error) {
+        console.error("Kon favorieten niet opslaan: ", error);
+    }
+
 }

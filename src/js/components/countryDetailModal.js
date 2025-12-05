@@ -77,6 +77,19 @@ export async function showCountryDetail(country, isFavorite) {
     } else {
         currencyInfo.textContent = "Geen valuta-informatie beschikbaar.";
     }
+    const hasLatLng =
+        Array.isArray(country.latlng) &&
+        country.latlng.length >= 2 &&
+        typeof country.latlng[0] === "number" &&
+        typeof country.latlng[1] === "number";
+
+    if (hasLatLng) {
+        alertBox.classList.add("d-none");
+        focusCountry(country.latlng[0], country.latlng[1], country.name?.common);
+    } else {
+        alertBox.classList.remove("d-none");
+        alertBox.textContent = "Locatiegegevens niet beschikbaar.";
+    }
 
     // Favourite button
     favBtn.textContent = isFavorite

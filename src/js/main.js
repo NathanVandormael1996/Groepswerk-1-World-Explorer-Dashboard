@@ -53,20 +53,29 @@ function setupFilterHandlers() {
     }
 }
 function applyFilters() {
-// TODO:
-// - zoekterm en regio uitlezen
-// - filteredCountries opbouwen vanuit allCountries
-// Voorbeeldstructuur:
-// const term = searchInput.value.trim().toLowerCase();
-// const region = regionSelect.value;
-// filteredCountries = allCountries.filter(...);
+    const term = searchInput ? searchInput.value.trim().toLowerCase() : "";
+    const region = regionSelect ? regionSelect.value : "all";
+
+    filteredCountries = (allCountries || []).filter((c) => {
+        const name = (c?.name?.common ?? "").toString().toLowerCase();
+
+        const matchesTerm = term === "" || name.includes(term);
+        const matchesRegion = region === "all" || c.region === region;
+
+        return matchesTerm && matchesRegion;
+    });
+
     renderCountryList({
         countries: filteredCountries,
         favorites,
         onCountryClick: handleCountryClick,
         onFavoriteToggle: handleFavoriteToggleFromList
     });
-    countriesCount.textContent = `${filteredCountries.length} landen`;
+
+    if (countriesCount) {
+        countriesCount.textContent = `${filteredCountries.length} landen`;
+    }
+
     updateStats();
 }
 function handleCountryClick(country) {
@@ -79,11 +88,23 @@ function handleFavoriteToggleFromModal(country) {
     toggleFavorite(country);
 }
 function toggleFavorite(country) {
-// TODO:
-// - key bepalen (bijv. country.cca3)
-// - indien al aanwezig in favorites: verwijderen
-// - anders: toevoegen (met minimaal name, region, cca3)
-// saveFavorites(favorites);
+    if (!country || !country.cca3) return;
+
+    const key = country.cca3;
+    const existingIndex = favorites.findIndex((f) => f.cca3 === key);
+
+    if (existingIndex >= 0) {
+        favorites.splice(existingIndex, 1); // verwijderen
+    } else {
+        favorites.push({
+            cca3: country.cca3,
+            name: country.name?.common || "Onbekend",
+            region: country.region || "Onbekend",
+            population: typeof country.population === "number" ? country.population : 0
+        });
+    }
+
+    saveFavorites(favorites);
     renderFavorites();
     updateStats();
 }
