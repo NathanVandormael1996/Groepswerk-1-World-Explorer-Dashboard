@@ -2,13 +2,13 @@
  * onderstaand url kan niet meer up to date zijn
  controleer zelf de api
  */
-const COUNTRIES_API_URL = "https://restcountries.com/v3.1/all";
+
 /**
  * Haalt alle landen op via de REST Countries API.
  * @returns {Promise<Array>} array van landen
  */
 export async function fetchAllCountries() {
-    const COUNTRIES_API_URL = "https://restcountries.com/v3.1/all";
+    const COUNTRIES_API_URL = "https://restcountries.com/v3.1/all?fields=name,capital,region,population,flags,latlng,languages,currencies,cca3";
 
     /**
      * Haalt alle landen op via de REST Countries API.
